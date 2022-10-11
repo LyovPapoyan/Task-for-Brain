@@ -1,0 +1,74 @@
+<div class="wrapper">
+  <div
+    id="listOne"
+    class="example-list"
+    cdkDropList
+    [cdkDropListData]="formsList"
+    [cdkDropListConnectedTo]="['listTwo']"
+    (cdkDropListDropped)="drop($event)"
+  >
+    <div class="example-box" cdkDrag *ngFor="let form of formsList">
+      <nz-form-item>
+        <nz-form-label>{{ form.label }}</nz-form-label>
+        <nz-form-control>
+          <input nz-input [type]="form.type" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div class="example-container">
+    <div
+      id="listTwo"
+      class="example-list"
+      cdkDropList
+      [cdkDropListData]="userForms"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div
+        class="example-box"
+        *ngFor="let form of userForms; let index = index"
+        cdkDrag
+      >
+        <nz-form-item>
+          <nz-form-label>{{ form?.config?.label ? form?.config?.label : form.label}}</nz-form-label>
+          <nz-form-control>
+            <input
+              [value]="test"
+              nz-input
+              [type]="form.type"
+              [value]="form?.config?.value ? form?.config?.value : ''"
+              [disabled]="!isEdit"
+            />
+          </nz-form-control>
+        </nz-form-item>
+        <button nz-button nzType="primary" (click)="deleteForm(index)" nzDanger class="delete">Delete</button>
+      </div>
+      <div class="button" *ngIf="userForms.length">
+        <button nz-button nzType="primary" (click)="submit()" class="submit">{{isEdit ? 'Edit' : 'Submit'}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="table-wrapper">
+<nz-table [nzData]="allForms" *ngIf="allForms.length" nzFrontPagination="false">
+  <thead>
+    <tr>
+      <th nzWidth="300px" nzAlign="center">Name</th>
+      <th nzWidth="300px" nzAlign="center">Created date</th>
+      <th nzWidth="180px" nzAlign="center">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of allForms; let index = index">
+      <td nzAlign="center">{{ data.name }}</td>
+      <td nzAlign="center">{{ data.created_date | date }}</td>
+      <td class="action-buttons">
+       <button nz-button nzType="primary" (click)="edit(data.value)">Edit</button>
+       <button nz-button nzType="primary" (click)="deleteFromAllForm(index)" nzDanger class="delete">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+ </nz-table>
+</div>
